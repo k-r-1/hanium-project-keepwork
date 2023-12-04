@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PersonalSignUpActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="학력 사항"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:background="@null"
+            android:src="@drawable/ic_baseline_arrow_back_ios_24" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--아이디-->
+            <TextView
+                android:id="@+id/id_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="50dp"
+                android:text="학교명"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/school1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    gravity="center"
+                    android:layout_width="183dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/school2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="예) 한이음대학교"
+                        android:textAppearance="@style/TextLabel" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+<!--                <Spinner-->
+<!--                    android:id="@+id/graduate_spinner"-->
+<!--                    android:layout_width="84dp"-->
+<!--                    android:layout_height="48dp"-->
+<!--                    android:gravity="right"-->
+<!--                    android:layout_marginLeft="10dp"-->
+<!--                    android:spinnerMode="dropdown" />-->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/rounded_border">
+
+                    <!-- Spinner -->
+                    <Spinner
+                        android:id="@+id/graduate_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--이름-->
+            <TextView
+                android:id="@+id/name_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:text="재학 기간"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/graduate_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:text="입학일자" />
+
+                <Button
+                    android:id="@+id/admission_calendar"
+                    android:layout_width="63dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="달력" />
+
+                <EditText
+                    android:id="@+id/edt_admission_year"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_grauate_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="년"
+                    />
+
+                <EditText
+                    android:id="@+id/edt_admission_month"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_grauate_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="월" />
+
+                <EditText
+                    android:id="@+id/edt_admission_day"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_graduate_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/entrance_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:text="졸업일자" />
+
+                <Button
+                    android:id="@+id/graduate_calendar"
+                    android:layout_width="63dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="달력" />
+
+                <EditText
+                    android:id="@+id/edt_graduate_year"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="년"
+                    />
+
+                <EditText
+                    android:id="@+id/edt_graduate_month"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="월" />
+
+                <EditText
+                    android:id="@+id/edt_graduate_day"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일" />
+
+            </LinearLayout>
+
+            <!--이메일-->
+            <TextView
+                android:id="@+id/email_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:text="전공명"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/name_textview_input_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="40dp"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/name_textview_input_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="예) 경영학과"
+                        android:textAppearance="@style/TextLabel" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <!--전화번호-->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phoneNumber_textview_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginTop="10dp"/>
+
+
+            <!--완료 버튼-->
+            <Button
+                android:id="@+id/complete_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="완료"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView_main_result"
+                android:layout_width="match_parent"
+                android:layout_height="197dp"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

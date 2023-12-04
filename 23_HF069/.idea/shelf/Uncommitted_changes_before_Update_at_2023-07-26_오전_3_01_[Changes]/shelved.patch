@@ -1,0 +1,647 @@
+Index: app/src/main/java/com/example/a23_hf069/ResumeChangeActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.a23_hf069\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.os.Bundle\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.widget.Button\r\nimport android.widget.EditText\r\nimport android.widget.TextView\r\nimport android.widget.Toast\r\nimport okhttp3.*\r\nimport java.io.IOException\r\n\r\nclass ResumeChangeActivity : AppCompatActivity() {\r\n    private var IP_ADDRESS = \"15.165.160.71\" // Replace with your IP address.\r\n    private var userId: String = \"\" // User ID\r\n    private var resumeListNum: Int = -1\r\n    private lateinit var editResumeTitle: EditText\r\n    private lateinit var editTextAcademic: EditText\r\n    private lateinit var editTextCareer: EditText\r\n    private lateinit var editTextIntroduction: EditText\r\n    private lateinit var editTextCertificate: EditText\r\n    private lateinit var editTextEducation: EditText\r\n    private lateinit var editTextDesire: EditText\r\n    private lateinit var buttonSubmit1: Button\r\n    private lateinit var buttonSubmit2: Button\r\n\r\n    @SuppressLint(\"MissingInflatedId\")\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_resume_change)\r\n\r\n// Get user ID\r\n        resumeListNum = intent.getIntExtra(\"resumeListNum\", -1)\r\n        userId = intent.getStringExtra(\"userId\") ?: \"\"\r\n\r\n        val textID = findViewById<TextView>(R.id.tvchID)\r\n        textID.text = userId\r\n\r\n        editTextAcademic = findViewById(R.id.edtchAcademic)\r\n        editResumeTitle = findViewById(R.id.edtchTitle)\r\n        editTextCareer = findViewById(R.id.edtchCareer)\r\n        editTextIntroduction = findViewById(R.id.edtchIntroduction)\r\n        editTextCertificate = findViewById(R.id.edtchCertificate)\r\n        editTextEducation = findViewById(R.id.edtchEducation)\r\n        editTextDesire = findViewById(R.id.edtchDesire)\r\n        buttonSubmit1 = findViewById(R.id.buttonchSubmit_temporary)\r\n        buttonSubmit2 = findViewById(R.id.buttonchSubmit_complete)\r\n\r\n        buttonSubmit1.setOnClickListener { // 임시 저장\r\n            val personal_id = userId\r\n            val resume_title = editResumeTitle.text.toString()\r\n            val resume_academic = editTextAcademic.text.toString()\r\n            val resume_career = editTextCareer.text.toString()\r\n            val resume_introduction = editTextIntroduction.text.toString()\r\n            val resume_certificate = editTextCertificate.text.toString()\r\n            val resume_learning = editTextEducation.text.toString()\r\n            val resume_desire = editTextDesire.text.toString()\r\n            val resume_complete = \"작성 중\"\r\n\r\n            sendResumeData(\r\n                personal_id,\r\n                resume_title,\r\n                resume_academic,\r\n                resume_career,\r\n                resume_introduction,\r\n                resume_certificate,\r\n                resume_learning,\r\n                resume_desire,\r\n                resume_complete\r\n            )\r\n\r\n            Toast.makeText(this, \"이력서가 임시저장되었습니다\", Toast.LENGTH_SHORT).show()\r\n        }\r\n\r\n        buttonSubmit2.setOnClickListener { // 작성완료\r\n            val personal_id = userId\r\n            val resume_title = editResumeTitle.text.toString()\r\n            val resume_academic = editTextAcademic.text.toString()\r\n            val resume_career = editTextCareer.text.toString()\r\n            val resume_introduction = editTextIntroduction.text.toString()\r\n            val resume_certificate = editTextCertificate.text.toString()\r\n            val resume_learning = editTextEducation.text.toString()\r\n            val resume_desire = editTextDesire.text.toString()\r\n            val resume_complete = \"작성 완료\"\r\n\r\n            sendResumeData(\r\n                personal_id,\r\n                resume_title,\r\n                resume_academic,\r\n                resume_career,\r\n                resume_introduction,\r\n                resume_certificate,\r\n                resume_learning,\r\n                resume_desire,\r\n                resume_complete\r\n            )\r\n\r\n            Toast.makeText(this, \"이력서가 작성완료되었습니다\", Toast.LENGTH_SHORT).show()\r\n        }\r\n    }\r\n\r\n    private fun sendResumeData(\r\n        personal_id: String,\r\n        resume_title: String,\r\n        resume_academic: String,\r\n        resume_career: String,\r\n        resume_introduction: String,\r\n        resume_certificate: String,\r\n        resume_learning: String,\r\n        resume_desire: String,\r\n        resume_complete: String\r\n    ) {\r\n        val url = \"http://$IP_ADDRESS/android_resume_write_php.php\" // URL of the hosting server with PHP script\r\n\r\n        val client = OkHttpClient()\r\n\r\n        val formBody = FormBody.Builder()\r\n            .add(\"personal_id\", personal_id) // ID\r\n            .add(\"resume_title\", resume_title) // Title\r\n            .add(\"resume_academic\", resume_academic) // Education\r\n            .add(\"resume_career\", resume_career) // Career\r\n            .add(\"resume_introduction\", resume_introduction) // Introduction\r\n            .add(\"resume_certificate\", resume_certificate) // Certification\r\n            .add(\"resume_learning\", resume_learning) // Education history\r\n            .add(\"resume_desire\", resume_desire) // Desired job position\r\n            .add(\"resume_complete\", resume_complete)\r\n            .build()\r\n\r\n        val request = Request.Builder()\r\n            .url(url)\r\n            .post(formBody)\r\n            .build()\r\n\r\n        client.newCall(request).enqueue(object : okhttp3.Callback {\r\n            override fun onFailure(call: Call, e: IOException) {\r\n// Handle request failure\r\n                e.printStackTrace()\r\n            }\r\n\r\n            override fun onResponse(call: Call, response: Response) {\r\n// Handle request success\r\n                val responseData = response.body?.string()\r\n            }\r\n        })\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/a23_hf069/ResumeChangeActivity.kt b/app/src/main/java/com/example/a23_hf069/ResumeChangeActivity.kt
+--- a/app/src/main/java/com/example/a23_hf069/ResumeChangeActivity.kt	(revision e292af6b229e3783e550bf496e86165c2660c9b1)
++++ b/app/src/main/java/com/example/a23_hf069/ResumeChangeActivity.kt	(date 1690302294412)
+@@ -8,6 +8,9 @@
+ import android.widget.TextView
+ import android.widget.Toast
+ import okhttp3.*
++import org.json.JSONArray // JSONArray를 import 추가
++import org.json.JSONException
++import org.json.JSONObject
+ import java.io.IOException
+ 
+ class ResumeChangeActivity : AppCompatActivity() {
+@@ -29,7 +32,7 @@
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_resume_change)
+ 
+-// Get user ID
++        // Get user ID
+         resumeListNum = intent.getIntExtra("resumeListNum", -1)
+         userId = intent.getStringExtra("userId") ?: ""
+ 
+@@ -47,7 +50,7 @@
+         buttonSubmit2 = findViewById(R.id.buttonchSubmit_complete)
+ 
+         buttonSubmit1.setOnClickListener { // 임시 저장
+-            val personal_id = userId
++            val resume_listnum = resumeListNum.toString()
+             val resume_title = editResumeTitle.text.toString()
+             val resume_academic = editTextAcademic.text.toString()
+             val resume_career = editTextCareer.text.toString()
+@@ -57,8 +60,8 @@
+             val resume_desire = editTextDesire.text.toString()
+             val resume_complete = "작성 중"
+ 
+-            sendResumeData(
+-                personal_id,
++            updateResumeData(
++                resume_listnum,
+                 resume_title,
+                 resume_academic,
+                 resume_career,
+@@ -73,7 +76,7 @@
+         }
+ 
+         buttonSubmit2.setOnClickListener { // 작성완료
+-            val personal_id = userId
++            val resume_listnum = resumeListNum.toString()
+             val resume_title = editResumeTitle.text.toString()
+             val resume_academic = editTextAcademic.text.toString()
+             val resume_career = editTextCareer.text.toString()
+@@ -83,8 +86,8 @@
+             val resume_desire = editTextDesire.text.toString()
+             val resume_complete = "작성 완료"
+ 
+-            sendResumeData(
+-                personal_id,
++            updateResumeData(
++                resume_listnum,
+                 resume_title,
+                 resume_academic,
+                 resume_career,
+@@ -97,10 +100,13 @@
+ 
+             Toast.makeText(this, "이력서가 작성완료되었습니다", Toast.LENGTH_SHORT).show()
+         }
++
++        // 이력서 아이템 데이터 불러오기
++        getResumeItemData(resumeListNum)
+     }
+ 
+-    private fun sendResumeData(
+-        personal_id: String,
++    private fun updateResumeData(
++        resume_listnum: String,
+         resume_title: String,
+         resume_academic: String,
+         resume_career: String,
+@@ -110,12 +116,13 @@
+         resume_desire: String,
+         resume_complete: String
+     ) {
+-        val url = "http://$IP_ADDRESS/android_resume_write_php.php" // URL of the hosting server with PHP script
++        val url =
++            "http://$IP_ADDRESS/android_resume_update.php" // URL of the hosting server with PHP script
+ 
+         val client = OkHttpClient()
+ 
+         val formBody = FormBody.Builder()
+-            .add("personal_id", personal_id) // ID
++            .add("resume_listnum", resume_listnum) // ListNum
+             .add("resume_title", resume_title) // Title
+             .add("resume_academic", resume_academic) // Education
+             .add("resume_career", resume_career) // Career
+@@ -133,14 +140,70 @@
+ 
+         client.newCall(request).enqueue(object : okhttp3.Callback {
+             override fun onFailure(call: Call, e: IOException) {
+-// Handle request failure
++                // Handle request failure
+                 e.printStackTrace()
+             }
+ 
+             override fun onResponse(call: Call, response: Response) {
+-// Handle request success
++                // Handle request success
+                 val responseData = response.body?.string()
++
++                // UI 업데이트를 위한 runOnUiThread 호출
++                runOnUiThread {
++                    Toast.makeText(this@ResumeChangeActivity, responseData, Toast.LENGTH_SHORT).show()
++                }
++            }
++        })
++    }
++
++    // 이력서 아이템 데이터 불러오기
++    private fun getResumeItemData(resumeListNum: Int) {
++        val url =
++            "http://$IP_ADDRESS/android_resume_change.php?resume_listnum=$resumeListNum" // 데이터를 불러올 PHP 스크립트의 주소
++
++        val client = OkHttpClient()
++
++        val request = Request.Builder()
++            .url(url)
++            .get() // GET 방식으로 요청 변경
++            .build()
++
++        client.newCall(request).enqueue(object : okhttp3.Callback {
++            override fun onFailure(call: Call, e: IOException) {
++                // Handle request failure
++                e.printStackTrace()
++            }
++
++            override fun onResponse(call: Call, response: Response) {
++                val responseData = response.body?.string()
++                // 이력서 아이템 데이터를 파싱하여 UI 업데이트
++                runOnUiThread {
++                    handleResumeItemData(responseData)
++                }
+             }
+         })
+     }
+-}
+\ No newline at end of file
++
++    // 이력서 아이템 데이터를 처리하는 함수 추가
++    private fun handleResumeItemData(responseData: String?) {
++        try {
++            val jsonObject = JSONObject(responseData) // JSONObject로 파싱
++
++            // 이력서 아이템 데이터가 존재하는 경우에만 UI 업데이트
++            if (jsonObject.length() > 0) {
++                // 여기서 이력서 아이템 데이터를 파싱하여 UI에 표시하는 작업을 수행하면 됩니다.
++                // 예를 들어, 다음과 같이 각 EditText에 데이터를 설정할 수 있습니다.
++                editResumeTitle.setText(jsonObject.optString("resumeTitle", ""))
++                editTextAcademic.setText(jsonObject.optString("resumeAcademic", ""))
++                editTextCareer.setText(jsonObject.optString("resumeCareer", ""))
++                editTextIntroduction.setText(jsonObject.optString("resumeIntroduction", ""))
++                editTextCertificate.setText(jsonObject.optString("resumeCertificate", ""))
++                editTextEducation.setText(jsonObject.optString("resumeLearning", ""))
++                editTextDesire.setText(jsonObject.optString("resumeDesire", ""))
++            }
++        } catch (e: JSONException) {
++            // JSON 파싱 오류 처리
++            e.printStackTrace()
++        }
++    }
++}
+Index: app/src/main/java/com/example/a23_hf069/ResumeFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import android.annotation.SuppressLint\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport android.os.Handler\r\nimport android.util.Log\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.Button\r\nimport android.widget.TextView\r\nimport android.widget.Toast\r\nimport androidx.core.content.ContentProviderCompat.requireContext\r\nimport androidx.core.content.ContextCompat.startActivity\r\nimport androidx.fragment.app.Fragment\r\nimport androidx.recyclerview.widget.LinearLayoutManager\r\nimport androidx.recyclerview.widget.RecyclerView\r\nimport com.example.a23_hf069.R\r\nimport com.example.a23_hf069.ResumeChangeActivity\r\nimport com.example.a23_hf069.ResumeWriteActivity\r\nimport com.google.gson.Gson\r\nimport okhttp3.*\r\nimport org.json.JSONException\r\nimport org.json.JSONObject\r\nimport java.io.IOException\r\n\r\nclass ResumeFragment : Fragment() {\r\n    // 서버의 IP 주소를 저장할 변수\r\n    private var IP_ADDRESS = \"15.165.160.71\"\r\n\r\n    // 사용자 ID를 저장할 변수\r\n    private lateinit var userId: String\r\n\r\n    // 사용자의 작성중 이력서 개수를 표시할 TextView 변수\r\n    private lateinit var tvResume_temporary_count: TextView\r\n\r\n    // 사용자의 작성완료 이력서 개수를 표시할 TextView 변수\r\n    private lateinit var tvResume_complete_count: TextView\r\n\r\n    // 이력서 추가 버튼을 나타낼 Button 변수\r\n    private lateinit var buttonAddResume: Button\r\n\r\n    // 이력서 목록을 표시할 RecyclerView 변수\r\n    private lateinit var recyclerView: RecyclerView\r\n\r\n    // 이력서 목록을 표시하는 어댑터를 담을 변수\r\n    private lateinit var dataAdapter: DataAdapter\r\n\r\n    // 이력서 목록을 업데이트하는 주기를 지정하는 변수 (2초로 설정)\r\n    private val updateIntervalMillis: Long = 2000\r\n\r\n    // 업데이트를 위해 사용할 핸들러 객체\r\n    private val handler = Handler()\r\n\r\n    // Handler 동작 여부를 나타내는 변수\r\n    private var isHandlerRunning = false\r\n\r\n    // Fragment가 화면에 보일 때 호출되는 메서드\r\n    override fun onStart() {\r\n        super.onStart()\r\n        // Handler 시작 (주기적인 작업 시작)\r\n        startHandler()\r\n    }\r\n\r\n    // Fragment가 화면에서 사라질 때 호출되는 메서드\r\n    override fun onStop() {\r\n        super.onStop()\r\n        // Handler 중지 (주기적인 작업 중지)\r\n        stopHandler()\r\n    }\r\n\r\n    // Handler 시작 메서드\r\n    private fun startHandler() {\r\n        if (!isHandlerRunning) {\r\n            handler.postDelayed(updateDataRunnable, updateIntervalMillis)\r\n            isHandlerRunning = true\r\n        }\r\n    }\r\n\r\n    // Handler 중지 메서드\r\n    private fun stopHandler() {\r\n        handler.removeCallbacks(updateDataRunnable)\r\n        isHandlerRunning = false\r\n    }\r\n\r\n    // 서버로부터 데이터를 가져오는 작업을 반복할 Runnable 객체\r\n    private val updateDataRunnable = object : Runnable {\r\n        override fun run() {\r\n            fetchDataFromServer()\r\n            handler.postDelayed(this, updateIntervalMillis) // 일정 간격 후 다시 호출\r\n        }\r\n    }\r\n\r\n    // Fragment의 뷰를 생성하는 메서드\r\n    @SuppressLint(\"MissingInflatedId\")\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater,\r\n        container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        // 뷰를 생성하여 반환하는 코드\r\n        val view = inflater.inflate(R.layout.fragment_resume, container, false)\r\n\r\n        // Argument로부터 전달받은 사용자 ID를 변수에 저장\r\n        if (arguments != null) {\r\n            userId = arguments?.getString(\"userId\", \"\") ?: \"\"\r\n        }\r\n\r\n        // 사용자 ID를 표시할 TextView 초기화\r\n        val textID = view.findViewById<TextView>(R.id.tvID1)\r\n        textID.text = userId\r\n\r\n        // RecyclerView 초기화 후 빈 어댑터 설정\r\n        recyclerView = view.findViewById(R.id.recyclerviewResume)\r\n        recyclerView.layoutManager = LinearLayoutManager(requireContext())\r\n\r\n        // 빈 어댑터 생성 및 RecyclerView에 설정\r\n        dataAdapter = DataAdapter(emptyList(), userId)\r\n        recyclerView.adapter = dataAdapter\r\n\r\n        // 작성중 이력서 개수와 작성완료 이력서 개수를 표시할 TextView 초기화\r\n        tvResume_temporary_count = view.findViewById(R.id.tvResume_temporary_count)\r\n        tvResume_complete_count = view.findViewById(R.id.tvResume_complete_count)\r\n\r\n        // 서버로 사용자 아이디를 전송하여 이력서 데이터를 가져오도록 요청\r\n        fetchDataFromServer()\r\n\r\n        // 이력서 추가 버튼 클릭 리스너 설정\r\n        buttonAddResume = view.findViewById<Button>(R.id.btnAddResume)\r\n        buttonAddResume.setOnClickListener {\r\n            val intent = Intent(requireContext(), ResumeWriteActivity::class.java)\r\n            intent.putExtra(\"userId\", userId)\r\n            startActivity(intent)\r\n        }\r\n\r\n        // 생성한 뷰 반환\r\n        return view\r\n    }\r\n\r\n    // Fragment의 뷰가 생성되었을 때 호출되는 메서드\r\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\r\n        super.onViewCreated(view, savedInstanceState)\r\n\r\n        // 이력서 삭제 버튼 클릭 리스너 설정\r\n        dataAdapter.setOnDeleteClickListener(object : DataAdapter.OnDeleteClickListener {\r\n            override fun onDeleteClick(resumeData: ResumeData) {\r\n                // 서버에서 이력서 데이터 삭제 요청\r\n                deleteResumeFromServer(resumeData.resumeListNum)\r\n            }\r\n        })\r\n\r\n        // 사용자의 작성중 이력서 개수와 작성완료 이력서 개수를 업데이트\r\n        fetchDataFromServer()\r\n\r\n        // 일정 간격으로 서버에서 데이터를 가져오고 UI를 업데이트하는 작업 시작\r\n        handler.postDelayed(updateDataRunnable, updateIntervalMillis)\r\n\r\n        // 이력서 삭제 버튼 클릭 리스너 설정\r\n        setupDeleteButtonClickListener()\r\n    }\r\n\r\n\r\n\r\n    // 서버로부터 데이터를 가져오는 메서드\r\n    private fun fetchDataFromServer() {\r\n        // 서버로 사용자 아이디를 전송하여 이력서 데이터를 가져오도록 요청\r\n        val phpUrl = \"http://$IP_ADDRESS/android_resume_fragment.php\"\r\n        val requestBody = FormBody.Builder()\r\n            .add(\"personal_id\", userId)\r\n            .build()\r\n        val request = Request.Builder()\r\n            .url(phpUrl)\r\n            .post(requestBody)\r\n            .build()\r\n\r\n        val client = OkHttpClient()\r\n        client.newCall(request).enqueue(object : Callback {\r\n            override fun onResponse(call: Call, response: Response) {\r\n                // 서버로부터 응답을 받았을 때 호출되는 콜백 메서드\r\n                val responseData = response.body?.string()\r\n                Log.d(\"ServerResponse\", responseData ?: \"No response data\")\r\n                if (responseData != null) {\r\n                    try {\r\n                        // JSON 파싱을 위해 Gson 객체 생성\r\n                        val gson = Gson()\r\n\r\n                        // 서버 응답 데이터를 담는 컨테이너 클래스로 파싱\r\n                        val dataListContainer = gson.fromJson(responseData, DataListContainer::class.java)\r\n\r\n                        // UI 업데이트는 메인 스레드에서 실행되어야 함\r\n                        requireActivity().runOnUiThread {\r\n                            // 가져온 이력서 데이터 리스트를 어댑터에 설정하여 RecyclerView 업데이트\r\n                            val dataList = dataListContainer?.resumeList\r\n                            if (dataList != null) {\r\n                                dataAdapter.setData(dataList)\r\n\r\n                                // 이력서 개수 설정\r\n                                val cnt1 = dataListContainer.cnt1\r\n                                val cnt2 = dataListContainer.cnt2\r\n\r\n                                // cnt1, cnt2가 null이 아닌지 확인하여 텍스트뷰에 업데이트\r\n                                if (cnt1 != null && cnt2 != null) {\r\n                                    tvResume_temporary_count.text = cnt1.toString()\r\n                                    tvResume_complete_count.text = cnt2.toString()\r\n                                } else {\r\n                                    // cnt1 또는 cnt2가 null인 경우에 대한 처리를 여기에 추가\r\n                                    Toast.makeText(view?.context, \"이력서 개수를 가져오지 못했습니다.\", Toast.LENGTH_SHORT).show()\r\n                                }\r\n                            } else {\r\n                                // dataList가 null인 경우에 대한 처리를 여기에 추가\r\n                                Toast.makeText(view?.context, \"서버로부터 이력서 데이터를 가져오지 못했습니다.\", Toast.LENGTH_SHORT).show()\r\n                            }\r\n                        }\r\n                    } catch (e: JSONException) {\r\n                        // JSON 파싱 오류 발생한 경우\r\n                        Log.e(\"JSONParsingError\", \"Invalid JSON format: $responseData\")\r\n                    }\r\n                } else {\r\n                    // responseData가 null인 경우에 대한 처리를 여기에 추가\r\n                    Log.e(\"ServerResponse\", \"Response data is null\")\r\n                    Toast.makeText(view?.context, \"서버로부터 응답이 없습니다.\", Toast.LENGTH_SHORT).show()\r\n                }\r\n            }\r\n\r\n            override fun onFailure(call: Call, e: IOException) {\r\n                // 요청 실패 처리\r\n                e.printStackTrace()\r\n            }\r\n        })\r\n    }\r\n\r\n    // 이력서 삭제 버튼 클릭 리스너 설정\r\n    private fun setupDeleteButtonClickListener() {\r\n        dataAdapter.setOnDeleteClickListener(object : DataAdapter.OnDeleteClickListener {\r\n            override fun onDeleteClick(resumeData: ResumeData) {\r\n                // 서버에서 이력서 데이터 삭제 요청\r\n                deleteResumeFromServer(resumeData.resumeListNum)\r\n            }\r\n        })\r\n    }\r\n\r\n    // 서버로 이력서 삭제 요청\r\n    private fun deleteResumeFromServer(resumeListNum: Int?) {\r\n        // resumeListNum이 null인 경우에 대비하여 처리\r\n        if (resumeListNum == null) {\r\n            // null인 경우, 서버 요청을 보낼 수 없으므로 오류 처리\r\n            requireActivity().runOnUiThread {\r\n                Toast.makeText(view?.context, \"잘못된 이력서 번호입니다.\", Toast.LENGTH_SHORT).show()\r\n            }\r\n            return\r\n        }\r\n\r\n        val phpUrl = \"http://$IP_ADDRESS/android_resume_delete.php\"\r\n        val requestBody = FormBody.Builder()\r\n            .add(\"personal_id\", userId)\r\n            .add(\"resume_listnum\", resumeListNum.toString())\r\n            .build()\r\n        val request = Request.Builder()\r\n            .url(phpUrl)\r\n            .post(requestBody)\r\n            .build()\r\n\r\n        val client = OkHttpClient()\r\n        client.newCall(request).enqueue(object : Callback {\r\n            override fun onResponse(call: Call, response: Response) {\r\n                // 서버로부터 응답을 받았을 때 호출되는 콜백 메서드\r\n                val responseData = response.body?.string()\r\n                Log.d(\"DeleteResponse\", responseData ?: \"No response data\")\r\n                if (responseData != null && responseData.contains(\"Record deleted successfully\")) {\r\n                    // 삭제 성공\r\n                    requireActivity().runOnUiThread {\r\n                        // RecyclerView에서 아이템 삭제\r\n                        dataAdapter.removeDataByListNum(resumeListNum)\r\n                        // 작성중 이력서 개수와 작성완료 이력서 개수 업데이트\r\n                        fetchDataFromServer()\r\n                        // 삭제 성공 메시지 출력\r\n                        Toast.makeText(view?.context, \"이력서를 성공적으로 삭제했습니다.\", Toast.LENGTH_SHORT).show()\r\n                    }\r\n                } else {\r\n                    // 삭제 실패 또는 응답 데이터 오류\r\n                    requireActivity().runOnUiThread {\r\n                        Toast.makeText(view?.context, \"이력서를 삭제했습니다.\", Toast.LENGTH_SHORT).show()\r\n                    }\r\n                }\r\n            }\r\n\r\n            override fun onFailure(call: Call, e: IOException) {\r\n                // 요청 실패 처리\r\n                e.printStackTrace()\r\n                requireActivity().runOnUiThread {\r\n                    Toast.makeText(view?.context, \"서버와 연결할 수 없습니다.\", Toast.LENGTH_SHORT).show()\r\n                }\r\n            }\r\n        })\r\n    }\r\n\r\n    // 이력서 데이터 클래스\r\n    data class ResumeData(val resumeListNum: Int, val resumeTitle: String, val writeStatus: String)\r\n\r\n    // 이력서 데이터 리스트 컨테이너 클래스\r\n    data class DataListContainer(\r\n        val resumeList: List<ResumeData> = emptyList(),\r\n        val cnt1: Int = 0,\r\n        val cnt2: Int = 0\r\n    )\r\n\r\n    // 이력서 목록을 표시하는 어댑터 클래스\r\n    class DataAdapter(private var dataList: List<ResumeData>,\r\n                      private val userId: String\r\n    ) : RecyclerView.Adapter<DataAdapter.ViewHolder>() {\r\n\r\n        // 각각의 뷰를 보유하는 뷰홀더 클래스\r\n        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {\r\n            val textViewTitle: TextView = itemView.findViewById(R.id.tvResumeTitle)\r\n            val textViewStatus: TextView = itemView.findViewById(R.id.tvWriteStatus)\r\n            val buttonRemove: Button = itemView.findViewById(R.id.buttonRemove)\r\n            val buttonChange: Button = itemView.findViewById(R.id.buttonEdit)\r\n        }\r\n\r\n        // 뷰홀더 생성\r\n        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {\r\n            val view = LayoutInflater.from(parent.context)\r\n                .inflate(R.layout.resume_item, parent, false)\r\n            return ViewHolder(view)\r\n        }\r\n\r\n        // 삭제 버튼 클릭 리스너 인터페이스\r\n        interface OnDeleteClickListener {\r\n            fun onDeleteClick(resumeData: ResumeData)\r\n        }\r\n\r\n        private var deleteClickListener: OnDeleteClickListener? = null\r\n\r\n        // 삭제 버튼 클릭 리스너 설정\r\n        fun setOnDeleteClickListener(listener: OnDeleteClickListener) {\r\n            deleteClickListener = listener\r\n        }\r\n\r\n        // 아이템 삭제 메서드\r\n        fun removeDataByListNum(resumeListNum: Int) {\r\n            val updatedList = dataList.toMutableList()\r\n            val position = updatedList.indexOfFirst { it.resumeListNum == resumeListNum }\r\n            if (position != -1) {\r\n                updatedList.removeAt(position)\r\n                dataList = updatedList\r\n                notifyItemRemoved(position)\r\n            }\r\n        }\r\n\r\n\r\n        // 뷰홀더의 뷰에 데이터를 바인딩\r\n        override fun onBindViewHolder(holder: ViewHolder, position: Int) {\r\n            val data = dataList[position]\r\n            holder.textViewTitle.text = data.resumeTitle\r\n            holder.textViewStatus.text = data.writeStatus\r\n\r\n            // 삭제 버튼 클릭 리스너 설정\r\n            holder.buttonRemove.setOnClickListener {\r\n                deleteClickListener?.onDeleteClick(data)\r\n            }\r\n\r\n            // 수정 버튼 클릭 리스너 설정\r\n            holder.buttonChange.setOnClickListener {\r\n                val intent = Intent(holder.itemView.context, ResumeChangeActivity::class.java)\r\n                intent.putExtra(\"resumeListNum\", data.resumeListNum)\r\n                intent.putExtra(\"userId\", userId)\r\n                holder.itemView.context.startActivity(intent)\r\n            }\r\n        }\r\n\r\n        // 전체 아이템 개수 반환\r\n        override fun getItemCount(): Int {\r\n            return dataList.size\r\n        }\r\n\r\n        // 외부에서 데이터를 설정할 수 있도록 setData() 함수 추가\r\n        fun setData(newDataList: List<ResumeData>) {\r\n            dataList = newDataList\r\n            notifyDataSetChanged()\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/a23_hf069/ResumeFragment.kt b/app/src/main/java/com/example/a23_hf069/ResumeFragment.kt
+--- a/app/src/main/java/com/example/a23_hf069/ResumeFragment.kt	(revision e292af6b229e3783e550bf496e86165c2660c9b1)
++++ b/app/src/main/java/com/example/a23_hf069/ResumeFragment.kt	(date 1690304792877)
+@@ -16,6 +16,7 @@
+ import androidx.recyclerview.widget.RecyclerView
+ import com.example.a23_hf069.R
+ import com.example.a23_hf069.ResumeChangeActivity
++import com.example.a23_hf069.ResumeClickActivity
+ import com.example.a23_hf069.ResumeWriteActivity
+ import com.google.gson.Gson
+ import okhttp3.*
+@@ -310,7 +311,7 @@
+ 
+         // 각각의 뷰를 보유하는 뷰홀더 클래스
+         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+-            val textViewTitle: TextView = itemView.findViewById(R.id.tvResumeTitle)
++            val textViewTitle: Button = itemView.findViewById(R.id.tvResumeTitle)
+             val textViewStatus: TextView = itemView.findViewById(R.id.tvWriteStatus)
+             val buttonRemove: Button = itemView.findViewById(R.id.buttonRemove)
+             val buttonChange: Button = itemView.findViewById(R.id.buttonEdit)
+@@ -350,7 +351,7 @@
+         // 뷰홀더의 뷰에 데이터를 바인딩
+         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+             val data = dataList[position]
+-            holder.textViewTitle.text = data.resumeTitle
++            holder.textViewTitle.setText(data.resumeTitle)
+             holder.textViewStatus.text = data.writeStatus
+ 
+             // 삭제 버튼 클릭 리스너 설정
+@@ -365,6 +366,14 @@
+                 intent.putExtra("userId", userId)
+                 holder.itemView.context.startActivity(intent)
+             }
++
++            // 이력서 제목 버튼 클릭 리스너 설정
++            holder.textViewTitle.setOnClickListener {
++                val intent = Intent(holder.itemView.context, ResumeClickActivity::class.java)
++                intent.putExtra("resumeListNum", data.resumeListNum)
++                intent.putExtra("userId", userId)
++                holder.itemView.context.startActivity(intent)
++            }
+         }
+ 
+         // 전체 아이템 개수 반환
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"true\" project-jdk-name=\"corretto-11\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision e292af6b229e3783e550bf496e86165c2660c9b1)
++++ b/.idea/misc.xml	(date 1690303998606)
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="corretto-11" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    package=\"com.example.a23_hf069\">\r\n    <!-- 인터넷 사용 권한 설정 -->\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:networkSecurityConfig=\"@xml/network_security_config\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.23_HF069\"\r\n        tools:targetApi=\"31\"\r\n        android:usesCleartextTraffic=\"true\"\r\n        >\r\n\r\n        <activity\r\n            android:name=\".SaeilSearchActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".CorporateSignUpActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".PersonalSignUpActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".HomeActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".JobDetailActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.VIEW\" />\r\n                <category android:name=\"android.intent.category.DEFAULT\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity\r\n            android:name=\".JobDetailActivity2\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.VIEW\" />\r\n                <category android:name=\"android.intent.category.DEFAULT\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity\r\n            android:name=\".JobDetailActivity3\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.VIEW\" />\r\n                <category android:name=\"android.intent.category.DEFAULT\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity\r\n            android:name=\".ResumeChangeActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".ResumeWriteActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision e292af6b229e3783e550bf496e86165c2660c9b1)
++++ b/app/src/main/AndroidManifest.xml	(date 1690303835403)
+@@ -8,18 +8,19 @@
+ 
+     <application
+         android:allowBackup="true"
+-        android:networkSecurityConfig="@xml/network_security_config"
+         android:dataExtractionRules="@xml/data_extraction_rules"
+         android:fullBackupContent="@xml/backup_rules"
+         android:icon="@mipmap/ic_launcher"
+         android:label="@string/app_name"
++        android:networkSecurityConfig="@xml/network_security_config"
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+         android:theme="@style/Theme.23_HF069"
+-        tools:targetApi="31"
+         android:usesCleartextTraffic="true"
+-        >
+-
++        tools:targetApi="31">
++        <activity
++            android:name=".ResumeClickActivity"
++            android:exported="false" />
+         <activity
+             android:name=".SaeilSearchActivity"
+             android:exported="false" />
+@@ -37,6 +38,7 @@
+             android:exported="true">
+             <intent-filter>
+                 <action android:name="android.intent.action.VIEW" />
++
+                 <category android:name="android.intent.category.DEFAULT" />
+             </intent-filter>
+         </activity>
+@@ -45,6 +47,7 @@
+             android:exported="true">
+             <intent-filter>
+                 <action android:name="android.intent.action.VIEW" />
++
+                 <category android:name="android.intent.category.DEFAULT" />
+             </intent-filter>
+         </activity>
+@@ -53,6 +56,7 @@
+             android:exported="true">
+             <intent-filter>
+                 <action android:name="android.intent.action.VIEW" />
++
+                 <category android:name="android.intent.category.DEFAULT" />
+             </intent-filter>
+         </activity>
+@@ -67,6 +71,7 @@
+             android:exported="true">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
++
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
+Index: app/src/main/res/layout/activity_resume_click.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_resume_click.xml b/app/src/main/res/layout/activity_resume_click.xml
+new file mode 100644
+--- /dev/null	(date 1690305150821)
++++ b/app/src/main/res/layout/activity_resume_click.xml	(date 1690305150821)
+@@ -0,0 +1,184 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical"
++    android:padding="16dp"
++    tools:context=".MainActivity">
++
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical">
++
++            <LinearLayout
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                android:orientation="horizontal">
++
++                <TextView
++                    android:id="@+id/tvclID"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="아이디"
++                    android:textSize="20dp" />
++
++                <TextView
++                    android:id="@+id/tvclResume"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="님의 이력서 확인"
++                    android:textSize="20dp" />
++            </LinearLayout>
++
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                android:orientation="horizontal">
++
++                <TextView
++                    android:id="@+id/clTitle"
++                    android:layout_width="50dp"
++                    android:layout_height="wrap_content"
++                    android:text="제목"
++                    android:textSize="20dp" />
++
++                <TextView
++                    android:id="@+id/edtclTitle"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:inputType="textPersonName" />
++            </LinearLayout>
++
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                android:orientation="horizontal">
++
++                <TextView
++                    android:id="@+id/tvcl1"
++                    android:layout_width="50dp"
++                    android:layout_height="wrap_content"
++                    android:text="학력"
++                    android:textSize="20dp" />
++
++                <TextView
++                    android:id="@+id/edtclAcademic"
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:background="@drawable/intro" />
++            </LinearLayout>
++
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                android:orientation="horizontal">
++
++                <TextView
++                    android:id="@+id/tvcl2"
++                    android:layout_width="50dp"
++                    android:layout_height="wrap_content"
++                    android:text="경력"
++                    android:textSize="20dp" />
++
++                <TextView
++                    android:id="@+id/edtclCareer"
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:background="@drawable/intro" />
++            </LinearLayout>
++
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                android:orientation="horizontal">
++
++                <TextView
++                    android:id="@+id/tvcl3"
++                    android:layout_width="50dp"
++                    android:layout_height="wrap_content"
++                    android:text="자기\n소개"
++                    android:textSize="20dp" />
++
++                <TextView
++                    android:id="@+id/edtclIntroduction"
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:background="@drawable/intro" />
++            </LinearLayout>
++
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                android:orientation="horizontal">
++
++                <TextView
++                    android:id="@+id/tvcl4"
++                    android:layout_width="50dp"
++                    android:layout_height="wrap_content"
++                    android:text="자격\n사항"
++                    android:textSize="20dp" />
++
++                <TextView
++                    android:id="@+id/edtclCertificate"
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:background="@drawable/intro" />
++            </LinearLayout>
++
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                android:orientation="horizontal">
++
++                <TextView
++                    android:id="@+id/tvcl5"
++                    android:layout_width="50dp"
++                    android:layout_height="wrap_content"
++                    android:text="교육\n사항"
++                    android:textSize="20dp" />
++
++                <TextView
++                    android:id="@+id/edtclEducation"
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:background="@drawable/intro" />
++            </LinearLayout>
++
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginBottom="16dp"
++                android:orientation="horizontal">
++
++                <TextView
++                    android:id="@+id/tvcl6"
++                    android:layout_width="50dp"
++                    android:layout_height="wrap_content"
++                    android:text="희망\n근무\n직군"
++                    android:textSize="20dp" />
++
++                <TextView
++                    android:id="@+id/edtclDesire"
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:background="@drawable/intro" />
++            </LinearLayout>
++
++        </LinearLayout>
++    </ScrollView>
++
++
++</LinearLayout>
+Index: app/src/main/java/com/example/a23_hf069/ResumeClickActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/a23_hf069/ResumeClickActivity.kt b/app/src/main/java/com/example/a23_hf069/ResumeClickActivity.kt
+new file mode 100644
+--- /dev/null	(date 1690305245757)
++++ b/app/src/main/java/com/example/a23_hf069/ResumeClickActivity.kt	(date 1690305245757)
+@@ -0,0 +1,101 @@
++package com.example.a23_hf069
++
++import android.annotation.SuppressLint
++import android.os.Bundle
++import androidx.appcompat.app.AppCompatActivity
++import android.widget.Button
++import android.widget.EditText
++import android.widget.TextView
++import android.widget.Toast
++import okhttp3.*
++import org.json.JSONArray // JSONArray를 import 추가
++import org.json.JSONException
++import org.json.JSONObject
++import java.io.IOException
++
++class ResumeClickActivity : AppCompatActivity() {
++    private var IP_ADDRESS = "15.165.160.71" // Replace with your IP address.
++    private var userId: String = "" // User ID
++    private var resumeListNum: Int = -1
++    private lateinit var editResumeTitle: TextView
++    private lateinit var editTextAcademic: TextView
++    private lateinit var editTextCareer: TextView
++    private lateinit var editTextIntroduction: TextView
++    private lateinit var editTextCertificate: TextView
++    private lateinit var editTextEducation: TextView
++    private lateinit var editTextDesire: TextView
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        setContentView(R.layout.activity_resume_click)
++
++        // Get user ID
++        resumeListNum = intent.getIntExtra("resumeListNum", -1)
++        userId = intent.getStringExtra("userId") ?: ""
++
++        val textID = findViewById<TextView>(R.id.tvclID)
++        textID.text = userId
++
++        editTextAcademic = findViewById(R.id.edtclAcademic)
++        editResumeTitle = findViewById(R.id.edtclTitle)
++        editTextCareer = findViewById(R.id.edtclCareer)
++        editTextIntroduction = findViewById(R.id.edtclIntroduction)
++        editTextCertificate = findViewById(R.id.edtclCertificate)
++        editTextEducation = findViewById(R.id.edtclEducation)
++        editTextDesire = findViewById(R.id.edtclDesire)
++
++        // 이력서 아이템 데이터 불러오기
++        getResumeItemData(resumeListNum)
++    }
++
++    // 이력서 아이템 데이터 불러오기
++    private fun getResumeItemData(resumeListNum: Int) {
++        val url =
++            "http://$IP_ADDRESS/android_resume_change.php?resume_listnum=$resumeListNum" // 데이터를 불러올 PHP 스크립트의 주소
++
++        val client = OkHttpClient()
++
++        val request = Request.Builder()
++            .url(url)
++            .get() // GET 방식으로 요청 변경
++            .build()
++
++        client.newCall(request).enqueue(object : okhttp3.Callback {
++            override fun onFailure(call: Call, e: IOException) {
++                // Handle request failure
++                e.printStackTrace()
++            }
++
++            override fun onResponse(call: Call, response: Response) {
++                val responseData = response.body?.string()
++                // 이력서 아이템 데이터를 파싱하여 UI 업데이트
++                runOnUiThread {
++                    handleResumeItemData(responseData)
++                }
++            }
++        })
++    }
++
++    // 이력서 아이템 데이터를 처리하는 함수 추가
++    private fun handleResumeItemData(responseData: String?) {
++        try {
++            val jsonObject = JSONObject(responseData) // JSONObject로 파싱
++
++            // 이력서 아이템 데이터가 존재하는 경우에만 UI 업데이트
++            if (jsonObject.length() > 0) {
++                // 여기서 이력서 아이템 데이터를 파싱하여 UI에 표시하는 작업을 수행하면 됩니다.
++                // 예를 들어, 다음과 같이 각 EditText에 데이터를 설정할 수 있습니다.
++                editResumeTitle.setText(jsonObject.optString("resumeTitle", ""))
++                editTextAcademic.setText(jsonObject.optString("resumeAcademic", ""))
++                editTextCareer.setText(jsonObject.optString("resumeCareer", ""))
++                editTextIntroduction.setText(jsonObject.optString("resumeIntroduction", ""))
++                editTextCertificate.setText(jsonObject.optString("resumeCertificate", ""))
++                editTextEducation.setText(jsonObject.optString("resumeLearning", ""))
++                editTextDesire.setText(jsonObject.optString("resumeDesire", ""))
++            }
++        } catch (e: JSONException) {
++            // JSON 파싱 오류 처리
++            e.printStackTrace()
++        }
++    }
++}
+Index: app/src/main/res/layout/resume_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:gravity=\"end\"\r\n    android:orientation=\"vertical\"\r\n    android:padding=\"16dp\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"10dp\"\r\n        android:layout_marginBottom=\"10dp\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvResumeTitle\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:hint=\"이력서 제목이 들어가야함\"\r\n            android:textSize=\"20sp\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvWriteStatus\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"end\"\r\n            android:hint=\"작성 완료\" />\r\n    </LinearLayout>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvfornull\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/buttonEdit\"\r\n            android:layout_width=\"70dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:layout_marginRight=\"5dp\"\r\n            android:text=\"수정\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/buttonRemove\"\r\n            android:layout_width=\"70dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:layout_gravity=\"end\"\r\n            android:text=\"삭제\" />\r\n    </LinearLayout>\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/resume_item.xml b/app/src/main/res/layout/resume_item.xml
+--- a/app/src/main/res/layout/resume_item.xml	(revision e292af6b229e3783e550bf496e86165c2660c9b1)
++++ b/app/src/main/res/layout/resume_item.xml	(date 1690304300178)
+@@ -13,13 +13,16 @@
+         android:layout_marginBottom="10dp"
+         android:orientation="horizontal">
+ 
+-        <TextView
++        <Button
+             android:id="@+id/tvResumeTitle"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:hint="이력서 제목이 들어가야함"
+-            android:textSize="20sp" />
++            android:textColor="@android:color/black"
++            android:textAlignment="viewStart"
++            android:textSize="20sp"
++            android:background="@android:color/transparent"/>
+ 
+         <TextView
+             android:id="@+id/tvWriteStatus"

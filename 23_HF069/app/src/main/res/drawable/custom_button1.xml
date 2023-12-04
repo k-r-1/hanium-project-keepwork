@@ -1,0 +1,21 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 버튼이 눌렸을 때의 상태를 정의합니다. -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <!-- 버튼 배경 색을 지정합니다. -->
+            <solid android:color="@color/white" />
+            <!-- 버튼의 테두리를 지정합니다. -->
+            <stroke android:width="2dp" android:color="#35B891" />
+            <!-- 버튼의 둥근 모서리를 지정합니다. -->
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+    <!-- 기본 상태일 때의 버튼 배경을 정의합니다. -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" />
+            <stroke android:width="2dp" android:color="#35B891" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+</selector>

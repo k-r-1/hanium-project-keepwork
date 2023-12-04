@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/id_text"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:hint="아이디" />
+
+    <EditText
+        android:id="@+id/pw_text"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:inputType="textPassword"
+        android:hint="비밀번호" />
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="180dp"
+        android:text="로그인" />
+
+    <Button
+        android:id="@+id/findID_btn"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="250dp"
+        android:backgroundTint="#00FFFFFF"
+        android:outlineProvider="none"
+        android:text="아이디찾기"
+        android:layout_marginLeft="30dp"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/findPW_btn"
+        android:layout_width="129dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="250dp"
+        android:backgroundTint="#00FFFFFF"
+        android:outlineProvider="none"
+        android:text="비밀번호찾기"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/signUp_btn"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="250dp"
+        android:backgroundTint="#00FFFFFF"
+        android:outlineProvider="none"
+        android:text="회원가입"
+        android:layout_marginLeft="270dp"
+        android:textColor="@color/black" />
+
+
+</FrameLayout>

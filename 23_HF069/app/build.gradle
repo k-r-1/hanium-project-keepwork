@@ -1,0 +1,145 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+
+    // Add the Google services Gradle plugin
+    id 'com.google.gms.google-services'
+}
+
+android {
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.a23_hf069"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        // 뷰 바인딩 활성화
+        viewBinding = true
+        // 데이터 바인딩 활성화
+        dataBinding = true
+        compose true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    namespace 'com.example.a23_hf069'
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.3'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.8.8'
+
+    implementation 'androidx.core:core-ktx:1.6.0'
+
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+
+    implementation 'com.google.android.material:material:1.6.0'
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'androidx.activity:activity-compose:1.7.2'
+    implementation platform('androidx.compose:compose-bom:2023.03.00')
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material3:material3'
+    implementation platform('androidx.compose:compose-bom:2023.03.00')
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation platform('androidx.compose:compose-bom:2023.03.00')
+
+    testImplementation 'junit:junit:4.+'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+
+    //tablayout
+    implementation 'com.google.android.material:material:1.3.0-alpha01'
+    // fragment
+    implementation("androidx.fragment:fragment-ktx:1.3.6")
+
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+
+
+    /*채용공고필요추가*/
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    //필터링
+    implementation 'com.github.kittinunf.fuel:fuel:2.3.1'
+    implementation "com.squareup.okhttp3:okhttp:4.9.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+
+    /*웹뷰*/
+    implementation 'androidx.webkit:webkit:1.4.0'
+
+    //데이터바인딩
+    implementation "androidx.databinding:databinding-runtime:3.5.0"
+
+    // 코루틴 라이브러리
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9"
+
+    implementation "com.squareup.okhttp3:okhttp:4.9.1"
+
+
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // Add dependencies for any other desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
+
+    // Retrofit 라이브러리 추가
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.'
+
+    // amazon ses 설정
+    implementation 'com.amazonaws:aws-android-sdk-ses:2.73.0'  // AWS SES 라이브러리
+    implementation 'com.amazonaws:aws-android-sdk-core:2.73.0' // AWS Core 라이브러리
+    // 원 형태 편집
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    androidTestImplementation platform('androidx.compose:compose-bom:2023.03.00')
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    androidTestImplementation platform('androidx.compose:compose-bom:2023.03.00')
+    androidTestImplementation platform('androidx.compose:compose-bom:2023.03.00')
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+
+}
+
+// Kotlin Android Extensions 플러그인 적용
+//apply plugin: 'kotlin-android-extensions'

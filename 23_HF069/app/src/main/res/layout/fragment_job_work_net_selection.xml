@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- 툴바 내용 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/tv_select_job"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#35B891"
+                android:drawableRight="@drawable/ic_baseline_search2_24"
+                android:ems="10"
+                android:hint="어떤 직종을 찾으세요?"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textColor="#35B891"
+                android:textColorHint="#9E9E9E"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="25dp"
+                android:layout_height="1dp"
+                android:background="@android:color/transparent" />
+
+            <Button
+                android:id="@+id/btn_job_select_complete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="선택"
+                app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:background="@android:color/transparent" />
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- tv_selected_job 텍스트 뷰와 "선택된 직종: " 텍스트뷰를 추가 -->
+    <LinearLayout
+        android:id="@+id/tv_selected_job_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_selected_job_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="선택된 직종: "
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_selected_job"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#35B891"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_corners"
+            android:padding="8dp" />
+
+    </LinearLayout>
+
+    <!-- 기존 LinearLayout 안에 아래 코드를 추가하세요. -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_major_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="대분류" />
+
+        <Button
+            android:id="@+id/btn_middle_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="중분류"
+            android:visibility="gone"
+            android:layout_marginStart="16dp" />
+
+    </LinearLayout>
+
+    <!-- 각 버튼에 해당하는 리스트뷰를 아래에 추가하세요. -->
+
+    <!-- 대분류용 ListView -->
+    <ListView
+        android:id="@+id/listview_major_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <!-- 중분류용 ListView -->
+    <ListView
+        android:id="@+id/listview_middle_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+</LinearLayout>

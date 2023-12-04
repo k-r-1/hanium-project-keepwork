@@ -1,0 +1,164 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cs_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WantedListFragment">
+
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- 툴바 내용 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="채용공고"
+                android:textColor="@android:color/black"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="25dp"
+                android:layout_height="1dp"
+                android:background="@android:color/transparent" />
+
+            <EditText
+                android:id="@+id/searchContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#35B891"
+                android:drawableRight="@drawable/ic_baseline_search2_24"
+                android:ems="10"
+                android:hint="즉시지원 가능한 일자리 검색"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textColor="#35B891"
+                android:textColorHint="#9E9E9E"
+                android:textSize="15sp" />
+
+
+            <View
+                android:layout_width="16dp"
+                android:layout_height="1dp"
+                android:background="@android:color/transparent" />
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!--<TextView
+        android:id="@+id/leftTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="4dp"
+        android:text="검색건수"
+        android:textColor="@android:color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@id/conditionButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    &lt;!&ndash;검색건수 num 값&ndash;&gt;
+
+    <TextView
+        android:id="@+id/countTextNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="num"
+        android:textColor="@android:color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@id/leftTextView"
+        app:layout_constraintStart_toEndOf="@id/leftTextView"
+        app:layout_constraintTop_toTopOf="@id/leftTextView" />
+
+    <TextView
+        android:id="@+id/countTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="건"
+        android:textColor="@android:color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@id/leftTextView"
+        app:layout_constraintStart_toEndOf="@id/countTextNum"
+        app:layout_constraintTop_toTopOf="@id/leftTextView" />-->
+
+    <!--조건검색 버튼-->
+
+    <Button
+        android:id="@+id/conditionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="조건검색"
+        android:textSize="13sp"
+        app:iconGravity="textStart"
+        app:layout_constraintEnd_toEndOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout01"
+        style="@style/CustomTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/conditionButton"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="#35B891"
+        app:tabIndicatorGravity="bottom"
+        app:tabIndicatorHeight="10dp"
+        app:tabRippleColor="#35B891"
+        app:tabSelectedTextColor="#35B891"
+        app:tabTextColor="@color/black"
+        tools:ignore="SpeakableTextPresentCheck">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="즉시지원" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="워크넷 채용공고" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager01"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tablayout01" />
+</androidx.constraintlayout.widget.ConstraintLayout>

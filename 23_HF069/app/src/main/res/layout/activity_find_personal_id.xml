@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".FindPersonalIdActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarFind_P_id"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
+
+        <ImageButton
+            android:id="@+id/backButton_findPid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:background="@null"
+            android:src="@drawable/ic_baseline_arrow_back_ios_new_24" />
+
+        <TextView
+            android:id="@+id/textView_findPid"
+            android:layout_width="324dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="개인회원 아이디 찾기"
+            android:textColor="#FFFFFF"
+            android:textSize="18dp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayoutFindPid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="#35B891"
+
+        app:tabIndicatorGravity="bottom"
+        app:tabIndicatorHeight="10dp"
+
+        app:tabRippleColor="#35B891"
+        app:tabSelectedTextColor="#35B891"
+        app:tabTextColor="@color/black"
+        tools:ignore="SpeakableTextPresentCheck" >
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전화번호로 찾기"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이메일로 찾기"/>
+
+    </com.google.android.material.tabs.TabLayout>
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpagerFindPid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

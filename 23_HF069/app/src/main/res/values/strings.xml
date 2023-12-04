@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">23_HF069</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login_test">loginTest</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+
+    <!-- 필수입력 요청 parameter -->
+    <!-- (인증키, callTp=L(호출할 페이지 타입=목록), returnType=xml, startPage=1, display=출력건수(기본값10~최대100)) -->
+    <string name="wanted_url">http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&amp;callTp=L&amp;returnType=XML&amp;startPage=1&amp;display=10</string>
+    <string name="region_url">http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&amp;target=CMCD&amp;authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&amp;dtlGb=1</string>
+    <string name="jobs_url">http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&amp;target=CMCD&amp;authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&amp;dtlGb=2</string>
+    <string name="title_activity_resume_check">ResumeCheckActivity</string>
+    <string name="title_activity_find_id">FindIdActivity</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_activity_resume_career">ResumeCareerActivity</string>
+    <string name="title_activity_talent_view">TalentViewActivity</string>
+
+    <!-- 검색 필터링 조건 = 직종, 지역, 학력, 경력 -->
+    <!-- 다중검색 가능 요청 parameter = region(지역), occupation(직종) -->
+</resources>

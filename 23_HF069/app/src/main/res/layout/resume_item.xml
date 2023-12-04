@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/tvResumeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="이력서 제목이 들어가야함"
+            android:textColor="@android:color/black"
+            android:textAlignment="viewStart"
+            android:textSize="20sp"
+            android:background="@android:color/transparent"/>
+
+        <TextView
+            android:id="@+id/tvWriteStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:hint="작성 완료" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvfornull"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/buttonEdit"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"
+            android:text="수정" />
+
+        <Button
+            android:id="@+id/buttonRemove"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:text="삭제" />
+    </LinearLayout>
+</LinearLayout>

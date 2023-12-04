@@ -1,0 +1,106 @@
+Index: app/src/main/java/com/example/a23_hf069/RegionSelectionFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.a23_hf069\r\n\r\nimport android.os.Bundle\r\nimport android.util.Xml\r\nimport android.view.LayoutInflater\r\nimport android.view.MotionEvent\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.AdapterView\r\nimport android.widget.ArrayAdapter\r\nimport android.widget.ListView\r\nimport android.widget.Toast\r\nimport androidx.fragment.app.Fragment\r\nimport com.example.a23_hf069.databinding.FragmentRegionSelectionBinding\r\nimport kotlinx.coroutines.Dispatchers\r\nimport kotlinx.coroutines.GlobalScope\r\nimport kotlinx.coroutines.launch\r\nimport kotlinx.coroutines.withContext\r\nimport okhttp3.*\r\nimport java.io.IOException\r\nimport java.io.StringReader\r\nimport org.xmlpull.v1.XmlPullParser\r\n\r\n\r\nclass RegionSelectionFragment : Fragment() {\r\n\r\n    private lateinit var binding: FragmentRegionSelectionBinding\r\n    private lateinit var regionAdapter1: ArrayAdapter<String>\r\n    private lateinit var regionAdapter2: ArrayAdapter<String>\r\n    private val regionList1: MutableList<String> = mutableListOf()\r\n    private val regionList2: MutableList<String> = mutableListOf()\r\n    private var selectedOneDepthRegion: String? = null// 선택한 oneDepth 지역명을 저장할 변수\r\n    private lateinit var regionListView1: ListView\r\n    private lateinit var regionListView2: ListView\r\n    private val baseUrl =\r\n        \"http://openapi.work.go.kr/opi/commonCode/commonCode.do?returnType=XML&target=CMCD&authKey=WNLJYZLM2VZXTT2TZA9XR2VR1HK&dtlGb=1\"\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater, container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        binding = FragmentRegionSelectionBinding.inflate(inflater, container, false)\r\n        val rootView = binding.root\r\n\r\n        // View 초기화\r\n        val searchEditText = binding.tvSelectRegion\r\n        regionListView1 = binding.lvSuperRegion\r\n        regionListView2 = binding.lvMiddleRegion\r\n        val selectedRegionTextView = binding.tvSelectedRegion\r\n        val regionSelcetButton = binding.btnRegionSelectComplete\r\n\r\n        // ListView 초기화\r\n        regionAdapter1 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, regionList1)\r\n        regionAdapter2 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, regionList2)\r\n        regionListView1.adapter = regionAdapter1\r\n        regionListView2.adapter = regionAdapter2\r\n\r\n        // 지역 목록 API 호출하여 regionList1,2에 결과 담기\r\n        fetchRegionList()\r\n\r\n        // EditText에서 검색어 입력 시 이벤트 처리\r\n        searchEditText.setOnEditorActionListener { _, _, _ ->\r\n            val searchText = searchEditText.text.toString()\r\n            filterregionList(searchText)\r\n            true\r\n        }\r\n\r\n        // regionListView1에서 아이템 선택 시 이벤트 처리\r\n        regionListView1.onItemClickListener =\r\n            AdapterView.OnItemClickListener { _, _, position, _ ->\r\n                selectedOneDepthRegion = regionAdapter1.getItem(position) ?: \"\"\r\n                updateRegionListView2()\r\n            }\r\n\r\n\r\n        // drawableRight(검색 아이콘) 클릭 시 검색 이벤트 처리\r\n        searchEditText.setOnTouchListener { _, event ->\r\n            val drawableRight = 2 // Index of the drawableRight icon\r\n            if (event.action == MotionEvent.ACTION_UP &&\r\n                event.rawX >= (searchEditText.right - searchEditText.compoundDrawables[drawableRight].bounds.width())\r\n            ) {\r\n                val searchText = searchEditText.text.toString()\r\n                filterregionList(searchText)\r\n                true\r\n            } else {\r\n                false\r\n            }\r\n        }\r\n\r\n        // btn_region_select_complete 버튼 클릭 시 이벤트 처리\r\n        regionSelcetButton.setOnClickListener {\r\n            val selectedRegion = selectedRegionTextView.text.toString()\r\n\r\n            // 선택된 직종 정보를 WantedFilteringFragment로 전달\r\n            val wantedFilteringFragment = WantedFilteringFragment()\r\n            val args = Bundle()\r\n            args.putString(\"selectedRegion\", selectedRegion)\r\n            wantedFilteringFragment.arguments = args\r\n\r\n            requireActivity().supportFragmentManager.beginTransaction()\r\n                .replace(R.id.fl_container, wantedFilteringFragment)\r\n                .addToBackStack(null)\r\n                .commit()\r\n        }\r\n\r\n        return rootView\r\n    }\r\n\r\n    private fun fetchRegionList() {\r\n        val client = OkHttpClient()\r\n        val request = Request.Builder()\r\n            .url(baseUrl)\r\n            .build()\r\n\r\n        client.newCall(request).enqueue(object : Callback {\r\n            override fun onFailure(call: Call, e: IOException) {\r\n                showErrorToast()\r\n            }\r\n\r\n            override fun onResponse(call: Call, response: Response) {\r\n                if (response.isSuccessful) {\r\n                    val xmlString = response.body?.string()\r\n                    parseRegionList(xmlString)\r\n                } else {\r\n                    showErrorToast()\r\n                }\r\n            }\r\n        })\r\n    }\r\n\r\n    private fun parseRegionList(xmlString: String?) {\r\n        // 기존 데이터를 초기화합니다.\r\n\r\n        GlobalScope.launch(Dispatchers.Main) {\r\n            withContext(Dispatchers.Default) {\r\n                val xmlPullParser: XmlPullParser = Xml.newPullParser()\r\n                xmlPullParser.setInput(StringReader(xmlString))\r\n\r\n                var eventType = xmlPullParser.eventType\r\n                var isOneDepth = false\r\n                var isTwoDepth = false\r\n                var isregionNm = false\r\n                var oneDepthRegionName = \"\"\r\n                var twoDepthRegionName = \"\"\r\n\r\n                while (eventType != XmlPullParser.END_DOCUMENT) {\r\n                    when (eventType) {\r\n                        XmlPullParser.START_TAG -> {\r\n                            when (xmlPullParser.name) {\r\n                                // 추가: oneDepth를 시작할 때 twoDepth를 종료합니다.\r\n                                \"oneDepth\" -> {\r\n                                    isOneDepth = true\r\n                                    isTwoDepth = false\r\n\r\n                                }\r\n                                // 추가: twoDepth를 시작할 때 oneDepth를 종료합니다.\r\n                                \"twoDepth\" -> {\r\n                                    isOneDepth = false\r\n                                    isTwoDepth = true\r\n                                }\r\n                                \"regionNm\" -> {\r\n                                    isregionNm = true\r\n                                }\r\n                            }\r\n                        }\r\n                        XmlPullParser.TEXT -> {\r\n                            if (isOneDepth && isregionNm && xmlPullParser.text.trim().isNotEmpty()) {\r\n                                oneDepthRegionName = xmlPullParser.text.trim()\r\n                            }\r\n                            if (isTwoDepth && isregionNm && xmlPullParser.text.trim().isNotEmpty()) {\r\n                                twoDepthRegionName = xmlPullParser.text.trim()\r\n                            }\r\n                        }\r\n                        XmlPullParser.END_TAG -> {\r\n                            when (xmlPullParser.name) {\r\n                                \"oneDepth\" -> {\r\n                                    if (oneDepthRegionName.isNotEmpty()) {\r\n                                        regionList1.add(oneDepthRegionName)\r\n                                        oneDepthRegionName = \"\"\r\n                                        isOneDepth=false\r\n                                    }\r\n                                }\r\n                                \"twoDepth\" -> {\r\n                                    if (twoDepthRegionName.isNotEmpty()) {\r\n                                        regionList2.add(twoDepthRegionName)\r\n                                        twoDepthRegionName = \"\"\r\n                                        isTwoDepth=false\r\n                                    }\r\n                                }\r\n                                \"regionNm\" -> {\r\n                                    isregionNm=false\r\n                                }\r\n                            }\r\n                        }\r\n                    }\r\n\r\n                    eventType = xmlPullParser.next()\r\n                }\r\n            }\r\n\r\n            regionAdapter1.notifyDataSetChanged()\r\n        }\r\n    }\r\n\r\n    private fun updateRegionListView2() {\r\n        val selectedRegion = selectedOneDepthRegion\r\n\r\n        // regionListView1에서 아무것도 선택되지 않았을 때, regionAdapter2를 비우고 리턴합니다.\r\n        if (selectedRegion == null) {\r\n            regionAdapter2.clear()\r\n            regionAdapter2.notifyDataSetChanged()\r\n            return\r\n        }\r\n\r\n        // 선택한 oneDepth 지역명에 해당하는 twoDepth 지역명들을 필터링하여 가져오기\r\n        val filteredTwoDepthRegions = regionList2.filter { region ->\r\n            val regionWords = region.split(\" \") // 띄어쓰기 등으로 문자열 분리\r\n            val selectedWords = selectedRegion.split(\" \")\r\n            regionWords.firstOrNull() == selectedWords.firstOrNull() // 앞 단어 기준으로 포함 (ex) 경기 광주 -> 광주가 아닌 경기가 기준\r\n        }.distinct()\r\n\r\n        // regionAdapter2를 새로운 리스트로 갱신합니다. ****filter 한 뒤에 기존 apdater를 변경하면 regionList2에 filter 내용이 적용되어 이상해짐****\r\n        regionAdapter2 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, filteredTwoDepthRegions)\r\n        regionListView2.adapter = regionAdapter2\r\n    }\r\n\r\n    private fun filterregionList(searchText: String) {\r\n        regionAdapter1.filter.filter(searchText)\r\n\r\n    }\r\n\r\n    private fun showErrorToast() {\r\n        Toast.makeText(requireContext(), \"Failed to fetch region list.\", Toast.LENGTH_SHORT).show()\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/a23_hf069/RegionSelectionFragment.kt b/app/src/main/java/com/example/a23_hf069/RegionSelectionFragment.kt
+--- a/app/src/main/java/com/example/a23_hf069/RegionSelectionFragment.kt	(revision 97bdf850ce62ec5fcb68df7c408b5f4181fb8291)
++++ b/app/src/main/java/com/example/a23_hf069/RegionSelectionFragment.kt	(date 1689836060000)
+@@ -29,6 +29,7 @@
+     private lateinit var regionAdapter2: ArrayAdapter<String>
+     private val regionList1: MutableList<String> = mutableListOf()
+     private val regionList2: MutableList<String> = mutableListOf()
++    private val wholeRegionList: MutableList<String> = mutableListOf("전체", "서울 전체", "부산 전체", "대구 전체","인천 전체", "광주 전체", "대전 전체", "울산 전체", "세종 전체", "경기 전체", "충북 전체", "충남 전체", "전북 전체", "전남 전체", "경북 전체", "경남 전체", "제주 전체", "강원 전체" )
+     private var selectedOneDepthRegion: String? = null// 선택한 oneDepth 지역명을 저장할 변수
+     private lateinit var regionListView1: ListView
+     private lateinit var regionListView2: ListView
+@@ -55,6 +56,7 @@
+         regionListView1.adapter = regionAdapter1
+         regionListView2.adapter = regionAdapter2
+ 
++
+         // 지역 목록 API 호출하여 regionList1,2에 결과 담기
+         fetchRegionList()
+ 
+@@ -70,9 +72,12 @@
+             AdapterView.OnItemClickListener { _, _, position, _ ->
+                 selectedOneDepthRegion = regionAdapter1.getItem(position) ?: ""
+                 updateRegionListView2()
+-            }
+-
+ 
++            }
++        regionListView2.onItemClickListener =
++            AdapterView.OnItemClickListener { _, _, position, _ ->
++                selectedRegionTextView.text = regionAdapter2.getItem(position) ?: ""
++            }
+         // drawableRight(검색 아이콘) 클릭 시 검색 이벤트 처리
+         searchEditText.setOnTouchListener { _, event ->
+             val drawableRight = 2 // Index of the drawableRight icon
+@@ -91,7 +96,7 @@
+         regionSelcetButton.setOnClickListener {
+             val selectedRegion = selectedRegionTextView.text.toString()
+ 
+-            // 선택된 직종 정보를 WantedFilteringFragment로 전달
++            // 선택된 지역 정보를 WantedFilteringFragment로 전달
+             val wantedFilteringFragment = WantedFilteringFragment()
+             val args = Bundle()
+             args.putString("selectedRegion", selectedRegion)
+@@ -199,6 +204,7 @@
+             }
+ 
+             regionAdapter1.notifyDataSetChanged()
++            regionList1.set(0, "전체")
+         }
+     }
+ 
+@@ -212,6 +218,13 @@
+             return
+         }
+ 
++        if(selectedRegion == "전체"){
++            regionAdapter2 = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, wholeRegionList)
++            regionListView2.adapter = regionAdapter2
++        }
++        for(i in wholeRegionList){
++            println(i)
++        }
+         // 선택한 oneDepth 지역명에 해당하는 twoDepth 지역명들을 필터링하여 가져오기
+         val filteredTwoDepthRegions = regionList2.filter { region ->
+             val regionWords = region.split(" ") // 띄어쓰기 등으로 문자열 분리
+Index: app/src/main/res/layout/filtering_list_item.xml
+===================================================================
+diff --git a/app/src/main/res/layout/filtering_list_item.xml b/app/src/main/res/layout/filtering_list_item.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/filtering_list_item.xml	(revision 97bdf850ce62ec5fcb68df7c408b5f4181fb8291)
++++ /dev/null	(revision 97bdf850ce62ec5fcb68df7c408b5f4181fb8291)
+@@ -1,24 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:layout_width="match_parent"
+-    android:layout_height="wrap_content"
+-    android:orientation="vertical"
+-    android:padding="16dp">
+-
+-    <TextView
+-        android:id="@+id/oneDepthTextView"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:textSize="16sp"
+-        android:textColor="@android:color/black"
+-        android:layout_marginTop="8dp" />
+-
+-    <TextView
+-        android:id="@+id/twoDepthTextView"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:textSize="16sp"
+-        android:textColor="@android:color/black"
+-        android:layout_marginTop="8dp" />
+-
+-</LinearLayout>
+diff --git a/app/src/main/java/com/example/a23_hf069/JobDetailActivity2.kt b/app/src/main/java/com/example/a23_hf069/WantedFilteredFragment.kt
+rename from app/src/main/java/com/example/a23_hf069/JobDetailActivity2.kt
+rename to app/src/main/java/com/example/a23_hf069/WantedFilteredFragment.kt

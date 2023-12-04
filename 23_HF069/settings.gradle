@@ -1,0 +1,18 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // Kakao Login
+        maven {url 'https://devrepo.kakao.com/nexus/content/groups/public/'}
+    }
+}
+rootProject.name = "23_HF069"
+include ':app'
